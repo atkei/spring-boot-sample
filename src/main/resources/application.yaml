@@ -1,0 +1,31 @@
+server:
+  port: 18888
+
+spring:
+  main:
+    banner-mode: off
+  jmx:
+    enabled: false
+  datasource:
+    driver-class-name: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:35432/tododb
+    username: todouser
+    password: todopass
+  flyway:
+    baseline-on-migrate: true
+
+mybatis:
+  config-location: classpath:mybatis-config.xml
+#  configuration:
+#    map-underscore-to-camel-case: true
+
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
+
+logging:
+  level:
+    org:
+      springframework: WARN
+      apache:
+        catalina: WARN
