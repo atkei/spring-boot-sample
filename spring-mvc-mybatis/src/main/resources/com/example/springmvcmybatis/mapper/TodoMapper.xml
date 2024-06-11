@@ -1,0 +1,79 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springmvcmybatis.mapper.TodoMapper">
+    <insert id="insert" parameterType="com.example.springmvcmybatis.dto.Todo" useGeneratedKeys="true" keyProperty="todoId">
+        INSERT INTO todos (title, description, completed) VALUES (#{title}, #{description}, #{completed})
+    </insert>
+
+    <select id="list" resultType="com.example.springmvcmybatis.dto.Todo">
+        SELECT
+            *
+        FROM todos
+        <if test="completed != null">
+            WHERE completed = #{completed}
+        </if>
+        ORDER BY todo_id
+        LIMIT #{limit}
+        OFFSET #{offset}
+    </select>
+
+    <select id="listWithTags" resultMap="todoWithTagsResultMap">
+        SELECT
+            todos.todo_id AS todo_id,
+            title,
+            description,
+            completed,
+            tags.name as tag_name
+        FROM todos
+            LEFT OUTER JOIN todos_tags ON todos.todo_id = todos_tags.todo_id
+            LEFT OUTER JOIN tags ON todos_tags.tag_name = tags.name
+        WHERE todos.todo_id IN (
+            SELECT todos.todo_id FROM todos
+            <if test="completed != null">
+                WHERE completed = #{completed}
+            </if>
+            LIMIT #{limit}
+            OFFSET #{offset}
+        )
+        ORDER BY todos.todo_id
+    </select>
+
+    <select id="get" resultType="com.example.springmvcmybatis.dto.Todo">
+        SELECT * from todos WHERE todo_id = #{todoId}
+    </select>
+
+    <select id="getWithTags" resultMap="todoWithTagsResultMap">
+        SELECT
+            todos.todo_id AS todo_id,
+            title,
+            description,
+            completed,
+            tags.name as tag_name
+        FROM todos
+            LEFT OUTER JOIN todos_tags ON todos.todo_id = todos_tags.todo_id
+            LEFT OUTER JOIN tags ON todos_tags.tag_name = tags.name
+        WHERE todos.todo_id = #{todoId}
+    </select>
+
+    <update id="update" parameterType="com.example.springmvcmybatis.dto.Todo">
+        UPDATE todos SET title = #{title}, description = #{description}, completed = ${completed} WHERE todo_id = #{todoId}
+    </update>
+
+    <delete id="delete">
+        DELETE FROM todos WHERE todo_id = #{todoId}
+    </delete>
+
+    <delete id="deleteAll">
+        DELETE FROM todos
+    </delete>
+
+    <resultMap id="todoWithTagsResultMap" type="com.example.springmvcmybatis.dto.TodoWithTags">
+        <result property="todoId" column="todo_id" />
+        <result property="title" column="title" />
+        <result property="description" column="description" />
+        <result property="completed" column="completed" />
+        <collection property="tags" ofType="com.example.springmvcmybatis.dto.Tag">
+            <result property="name" column="tag_name" />
+        </collection>
+    </resultMap>
+</mapper>

@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springmvcmybatis.mapper.TodoTagMapper">
+    <insert id="insert" parameterType="com.example.springmvcmybatis.dto.TodoTag">
+        INSERT INTO todos_tags (todo_id, tag_name) VALUES (#{todoId}, #{tagName})
+    </insert>
+
+    <select id="list" resultType="com.example.springmvcmybatis.dto.TodoTag">
+        SELECT * from todos_tags ORDER BY id LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="get" resultType="com.example.springmvcmybatis.dto.TodoTag">
+        SELECT * from todos_tags WHERE id = #{id}
+    </select>
+
+    <select id="find" resultType="com.example.springmvcmybatis.dto.TodoTag">
+        SELECT * from todos_tags WHERE todo_id = #{todoId} AND tag_name = #{tagName}
+    </select>
+
+    <delete id="delete">
+        DELETE FROM todos_tags WHERE id = #{id}
+    </delete>
+
+    <delete id="deleteByName">
+        DELETE FROM todos_tags WHERE todo_id = #{todoId} AND tag_name = #{tagName}
+    </delete>
+</mapper>

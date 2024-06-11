@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.example.springmvcmybatis.mapper.TagMapper">
+    <insert id="insert" parameterType="com.example.springmvcmybatis.dto.Tag">
+        INSERT INTO tags (name) VALUES (#{name})
+    </insert>
+
+    <select id="list" resultType="com.example.springmvcmybatis.dto.Tag">
+        SELECT * from tags ORDER BY name LIMIT #{limit} OFFSET #{offset}
+    </select>
+
+    <select id="listWithTodos" resultMap="tagWithTodosResultMap">
+        SELECT
+            name,
+            todos.todo_id as todo_id,
+            todos.title as todo_title,
+            todos.description as todo_description,
+            todos.completed as completed
+        FROM tags
+            LEFT OUTER JOIN todos_tags ON tags.name = todos_tags.tag_name
+            LEFT OUTER JOIN todos on todos_tags.todo_id = todos.todo_id
+        WHERE name IN (
+            SELECT name from tags
+            LIMIT #{limit}
+            OFFSET #{offset}
+        )
+        ORDER BY name
+    </select>
+
+    <select id="get" resultType="com.example.springmvcmybatis.dto.Tag">
+        SELECT * from tags WHERE name = #{name}
+    </select>
+
+    <select id="getWithTodos" resultMap="tagWithTodosResultMap">
+        SELECT
+            name,
+            todos.todo_id as todo_id,
+            todos.title as todo_title,
+            todos.description as todo_description,
+            todos.completed as completed
+        FROM tags
+            LEFT OUTER JOIN todos_tags ON tags.name = todos_tags.tag_name
+            LEFT OUTER JOIN todos on todos_tags.todo_id = todos.todo_id
+        WHERE name = #{name}
+    </select>
+
+    <delete id="delete">
+        DELETE FROM tags WHERE name = #{name}
+    </delete>
+
+    <delete id="deleteAll">
+        DELETE FROM tags
+    </delete>
+
+    <resultMap id="tagWithTodosResultMap" type="com.example.springmvcmybatis.dto.TagWithTodos">
+        <result property="name" column="name"/>
+        <collection property="todos" ofType="com.example.springmvcmybatis.dto.Todo">
+            <result property="todoId" column="todo_id" />
+            <result property="title" column="todo_title" />
+            <result property="description" column="todo_description" />
+            <result property="completed" column="completed" />
+        </collection>
+    </resultMap>
+</mapper>
