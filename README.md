@@ -2,5 +2,6 @@
 
 Spring Boot samples for experimentation.
 
-* [Spring MVC with MyBatis](spring-mvc-mybatis/README.md)
-* [Spring AI Functions](spring-ai-functions/README.md)
+* [Spring MVC with MyBatis](spring-mvc-mybatis)
+* [Spring AI Functions](spring-ai-functions)
+* [Spring Webflux Reactive Services](spring-reactive-services)
