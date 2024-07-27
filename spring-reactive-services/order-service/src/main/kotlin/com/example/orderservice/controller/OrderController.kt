@@ -19,7 +19,7 @@ class OrderController(private val orderService: OrderService) {
         return orderService.getAllOrders()
     }
 
-    @GetMapping("/user/{userId}")
+    @GetMapping("/users/{userId}")
     suspend fun getOrdersByUserId(@PathVariable userId: Int): Flow<Order> {
         return orderService.getOrdersByUserId(userId)
     }

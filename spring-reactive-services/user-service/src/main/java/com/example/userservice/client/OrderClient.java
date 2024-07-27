@@ -11,7 +11,7 @@ public class OrderClient {
 
     public Flux<Order> getOrdersByUserId(Long userId) {
         return client.get()
-                .uri("/orders?userId=" + userId)
+                .uri("/orders/users/" + userId)
                 .retrieve()
                 .bodyToFlux(Order.class);
     }
